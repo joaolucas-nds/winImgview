@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WinImgView</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <!-- Barra de status inferior: posição na pasta + zoom atual + nome do arquivo -->
+  <div id="statusbar">
+    <span id="status-position">—</span>
+    <span id="status-filename">Nenhuma imagem aberta</span>
+    <span id="status-zoom">100%</span>
+  </div>
+
+  <!-- Área principal de visualização -->
+  <div id="canvas" tabindex="0">
+
+    <!-- Tela inicial (drag & drop / instrução) -->
+    <div id="splash">
+      <p>Arraste uma imagem para cá</p>
+      <p class="hint">ou duplo-clique num arquivo no Explorer</p>
+      <p class="hint">← → navegam entre imagens da pasta</p>
+    </div>
+
+    <!-- Container de zoom/pan — transformações CSS aplicadas aqui -->
+    <div id="viewport">
+
+      <!--
+        SVG é renderizado num <iframe> isolado para garantir que o WebView2
+        processe o XML como vetor, com scripts e estilos próprios do SVG.
+        Alternativa <img> rasterizaria; <object> tem problemas de CORS local.
+      -->
+      <iframe
+        id="svg-frame"
+        class="hidden"
+        sandbox="allow-scripts allow-same-origin"
+        title="SVG viewer"
+      ></iframe>
+
+      <!-- Imagens raster (PNG, JPG, WebP, GIF) e base64 (TIFF, BMP, AVIF) -->
+      <img id="raster-img" class="hidden" alt="" draggable="false" />
+
+    </div><!-- #viewport -->
+
+  </div><!-- #canvas -->
+
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>

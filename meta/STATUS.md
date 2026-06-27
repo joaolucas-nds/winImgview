@@ -7,32 +7,40 @@
 ---
 
 ## Versão Atual
-**[0.1.0]** — 2026-06-26 — Pesquisa de viewers concluída; ferramentas recomendadas identificadas
+**[0.2.0]** — 2026-06-27 — Scaffolding MVP do viewer Tauri implementado
 
-## ✅ Funcionando
-- Pesquisa aprofundada de viewers Windows para SVG e WebP — concluída (ver HISTORICO.md § 1)
-- Tabela comparativa de 8 candidatos montada (CONTEXT.md)
-- Stack de build (Tauri) identificada caso Fase 4 seja necessária
-- Três decisões de arquitetura registradas (DEC-001 a DEC-003 em DECISIONS.md)
+## ✅ Funcionando (código gerado, aguarda build na máquina do usuário)
+- Estrutura Tauri 2.x completa: `Cargo.toml`, `tauri.conf.json`, `capabilities/`, `build.rs`
+- Backend Rust (`lib.rs`): `open_file`, `next_image`, `prev_image`, `get_position`
+- Navegação de pasta: lista imagens, ordena por nome, wrap-around nas bordas
+- Estratégia de renderização por tipo: SVG → iframe asset://, raster nativo → img asset://, TIFF/BMP/AVIF → base64 PNG
+- Frontend HTML/CSS/JS: zoom (roda + teclado), pan (arrastar), drag & drop, atalhos, ciclo de fundo, barra de status
+- Abertura via argv[1] (duplo-clique no Explorer emite evento `image-loaded` para o frontend)
+- SETUP.md com guia completo de instalação
 
 ## 🔧 Em Progresso
-- **Adoção do ImageGlass 9.5** — a ser baixado, instalado em portable e testado na máquina do usuário
+- **Build na máquina do usuário** — rodar `npm install && npm run build` para gerar o `.exe`
 
 ## ❌ Quebrado / Com Problema
-- *(nenhum — projeto em fase de pesquisa/setup, nada quebrado ainda)*
+- *(nada ainda — código não foi compilado/testado na máquina real)*
 
 ## 📋 Backlog (curto prazo — itens acionáveis)
-- [ ] Baixar ImageGlass 9.5.0.515 portable (.zip) do GitHub: `github.com/d2phap/ImageGlass/releases` — **não usar o .msi**
-- [ ] Extrair para pasta fixa (ex: `C:\Ferramentas\ImageGlass\`) e criar atalho na área de trabalho
-- [ ] Configurar ImageGlass como padrão para: `.svg`, `.webp`, `.png`, `.jpg`, `.gif`, `.avif`, `.heic`, `.bmp`, `.tiff`
-- [ ] Testar: abrir pasta com SVGs + WebPs mistos → navegar com setas → zoom → verificar que SVG não pixela
-- [ ] Testar: abrir `.webp` animado → verificar que animação roda dentro do viewer
-- [ ] Opcional: baixar FastStone 8.5 portable (`faststone.org/FSViewerDownload.htm`) como backup para workflow com RAW/batch
-- [ ] Avaliar gap após uso real (1–2 semanas): surgiu alguma necessidade que ImageGlass não cobre? → alimenta decisão da Fase 3
+- [ ] Instalar pré-requisitos (Rust, Node.js, Build Tools C++) conforme SETUP.md
+- [ ] `npm install && npm run build` na pasta do projeto
+- [ ] Testar: duplo-clique num SVG → abre viewer → zoom → sem pixel
+- [ ] Testar: WebP animado → animação roda dentro do viewer
+- [ ] Testar: navegação ← → entre imagens de uma pasta
+- [ ] Testar: drag & drop de arquivo para a janela
+- [ ] Testar: `B` alterna fundo, `Ctrl+Shift+C` copia caminho, `F11` fullscreen
+- [ ] Verificar ícone de aplicativo (adicionar .ico real em `src-tauri/icons/`)
+- [ ] Corrigir bugs encontrados após teste real
+- [ ] Registrar extensões no Windows (SETUP.md § "Associar extensões")
 
 ## 📁 Arquivos Críticos (não mexer sem contexto)
-- `CONTEXT.md` — tabela de viewers, armadilhas e decisão de stack (Tauri); alterar só se stack mudar ou nova armadilha surgir
-- `DECISIONS.md` — DEC-001 a DEC-003 já registradas; não reescrever entradas existentes
+- `src-tauri/src/lib.rs` — toda a lógica de backend: comandos Tauri, navegação, carga de imagem
+- `frontend/js/main.js` — toda a lógica de frontend: zoom, pan, atalhos, renderização
+- `src-tauri/tauri.conf.json` — configuração do app (identifier, janela, bundle)
+- `src-tauri/Cargo.toml` — dependências Rust
 
 ## 💬 Última Sessão
-**2026-06-26** — Pesquisa completa de viewers Windows para SVG e WebP. Identificados 8 candidatos; ImageGlass 9.5 portable (GitHub) eleito como primário (SVG vetorial via WebView2 + WebP + 90+ formatos). FastStone 8.5 como backup raster. Honeyview/BandiView descartados. IrfanView/XnView inadequados para SVG. Próximo passo: baixar ImageGlass portable e testar na máquina.
+**2026-06-27** — Decisão de pular F2/F3 e ir direto ao build customizado (DEC-004). Scaffolding completo do MVP gerado: backend Rust com navegação de pasta e 3 estratégias de renderização, frontend com zoom/pan/drag-drop/atalhos. Aguarda primeiro build e testes na máquina do usuário.
